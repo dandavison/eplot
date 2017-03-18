@@ -181,7 +181,7 @@ class OptionController
 
                 when /^-i$|^--imgcat$/
                     @o["imgcat"] = true
-                    com=com+"set terminal png;\n"
+                    com=com+"set terminal png;set key off;\n"
                     @o["OutputFileDefault"]="/tmp/eplot.png"
 
                 # Don't echo commands to screen
