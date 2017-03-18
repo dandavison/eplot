@@ -135,6 +135,7 @@ class OptionController
         @o["Range"]=""
         @o["OutputFileDefault"]=""
         @o["OutputFileSpecified"]=""
+        @o["quiet"] = false
 
         i=0
         com=""
@@ -176,6 +177,10 @@ class OptionController
                 # http://stackoverflow.com/a/42009770/583763
                 when /^-T$|^--terminal$/
                     com=com+"set terminal dumb;\n"
+
+                # Don't echo commands to screen
+                when /^-q$|^--quiet$/
+                    @o["quiet"]=true
 
                 # ---- Specify a custom output file
                 when /^-o$|^--output$/
@@ -368,7 +373,9 @@ class Controller
     # --------------------------------------------------------------------------
     # ---- Starts a command and checks for success
     def printAndRun(com)
-		$stderr.puts com
+        if not @oc["quiet"]
+	        $stderr.puts com
+        end
 		if not system(com)
 			$stderr.printf "Error while starting gnuplot."
 			$stderr.printf "Error code: %d\n",$?
