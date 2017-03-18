@@ -136,6 +136,7 @@ class OptionController
         @o["OutputFileDefault"]=""
         @o["OutputFileSpecified"]=""
         @o["quiet"] = false
+        @o["imgcat"] = false
 
         i=0
         com=""
@@ -177,6 +178,11 @@ class OptionController
                 # http://stackoverflow.com/a/42009770/583763
                 when /^-T$|^--terminal$/
                     com=com+"set terminal dumb;\n"
+
+                when /^-i$|^--imgcat$/
+                    @o["imgcat"] = true
+                    com=com+"set terminal png;\n"
+                    @o["OutputFileDefault"]="/tmp/eplot.png"
 
                 # Don't echo commands to screen
                 when /^-q$|^--quiet$/
@@ -381,6 +387,9 @@ class Controller
 			$stderr.printf "Error code: %d\n",$?
 			exit 1
 		end
+        if @oc["imgcat"]
+            system("imgcat /tmp/eplot.png")
+        end
 	end
 
 	# --------------------------------------------------------------------------
