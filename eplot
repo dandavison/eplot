@@ -115,223 +115,223 @@ MARKER_MESSAGE
 
 class OptionController
 
-	# --------------------------------------------------------------------------
-	# ---- constructor
-	def initialize(xargv)
-		@o={}
-		@o["Files"]=[]
-		@o["LineType"]="lines"
-		@o["LineWidth"]="1"
-		@o["DoPDF"]=false
-		@o["MulFrMul"]=false
-		@o["MulFrSin"]=false
-		@o["MulFrSeq"]=false
-		@o["DumpFiles"]=false
-		@o["TitleString"]=""
-		@o["Bars"]=""
-		@o["StyleIndices"]="1,2,3,4,5,6,7,8,9,10,11,12"
-		@o["Size"]=""
-		@o["Ratio"]=""
-		@o["Range"]=""
-		@o["OutputFileDefault"]=""
-		@o["OutputFileSpecified"]=""
+    # --------------------------------------------------------------------------
+    # ---- constructor
+    def initialize(xargv)
+        @o={}
+        @o["Files"]=[]
+        @o["LineType"]="lines"
+        @o["LineWidth"]="1"
+        @o["DoPDF"]=false
+        @o["MulFrMul"]=false
+        @o["MulFrSin"]=false
+        @o["MulFrSeq"]=false
+        @o["DumpFiles"]=false
+        @o["TitleString"]=""
+        @o["Bars"]=""
+        @o["StyleIndices"]="1,2,3,4,5,6,7,8,9,10,11,12"
+        @o["Size"]=""
+        @o["Ratio"]=""
+        @o["Range"]=""
+        @o["OutputFileDefault"]=""
+        @o["OutputFileSpecified"]=""
 
-		i=0
-		com=""
-		while i<xargv.length
-			opt=xargv[i]
+        i=0
+        com=""
+        while i<xargv.length
+            opt=xargv[i]
 
-			case opt
+            case opt
 
-				when /^-h$|^--help$/
-					usage
+                when /^-h$|^--help$/
+                    usage
 
-				when /^-v$|^--version$/
-					$stderr.puts "eplot version "+$Version
-					$stderr.puts $licence
-					exit 0
+                when /^-v$|^--version$/
+                    $stderr.puts "eplot version "+$Version
+                    $stderr.puts $licence
+                    exit 0
 
-				# ---- Do we create PNG output?
-				when /^-P$|^--png$/
-					com=com+"set terminal png;\n"
-					@o["OutputFileDefault"]="foo.png"
+                # ---- Do we create PNG output?
+                when /^-P$|^--png$/
+                    com=com+"set terminal png;\n"
+                    @o["OutputFileDefault"]="foo.png"
 
-				# ---- Do we create Postscript output?
-				when /^-p$|^--postscript$/
-					com=com+"set terminal postscript color;\n"
-					@o["OutputFileDefault"]="foo.ps"
+                # ---- Do we create Postscript output?
+                when /^-p$|^--postscript$/
+                    com=com+"set terminal postscript color;\n"
+                    @o["OutputFileDefault"]="foo.ps"
 
-				# ---- Do we create EMF output?
-				when /^-e$|^--emf$/
-					com=com+"set terminal emf \"helvetica\";\n"
-					@o["OutputFileDefault"]="foo.emf"
+                # ---- Do we create EMF output?
+                when /^-e$|^--emf$/
+                    com=com+"set terminal emf \"helvetica\";\n"
+                    @o["OutputFileDefault"]="foo.emf"
 
-				# ---- Do we create PDF output? First we create postscript
-				# ---- A conversion is done afterwards
-				when /^-a$|^--acrobat$|--pdf$/
-					com=com+"set terminal postscript color;\n"
-					@o["DoPDF"]=true
+                # ---- Do we create PDF output? First we create postscript
+                # ---- A conversion is done afterwards
+                when /^-a$|^--acrobat$|--pdf$/
+                    com=com+"set terminal postscript color;\n"
+                    @o["DoPDF"]=true
 
                 # Output to terminal
                 # http://stackoverflow.com/a/42009770/583763
                 when /^-T$|^--terminal$/
                     com=com+"set terminal dumb;\n"
 
-				# ---- Specify a custom output file
-				when /^-o$|^--output$/
-					@o["OutputFileSpecified"]=checkOptArg(xargv,i)
-					i=i+1
+                # ---- Specify a custom output file
+                when /^-o$|^--output$/
+                    @o["OutputFileSpecified"]=checkOptArg(xargv,i)
+                    i=i+1
 
-				# ---- Multiple curves in a single diagram from different files
-				when /^-m$|^--mulfrmul$/
-					@o["MulFrMul"]=true
+                # ---- Multiple curves in a single diagram from different files
+                when /^-m$|^--mulfrmul$/
+                    @o["MulFrMul"]=true
 
-				# ---- Multiple curves in a single diagram from a single file
-				when /^-M$|^--mulfrsin$/
-					@o["MulFrSin"]=true
+                # ---- Multiple curves in a single diagram from a single file
+                when /^-M$|^--mulfrsin$/
+                    @o["MulFrSin"]=true
 
- 				# ---- Multiple curves in a single diagram from a single column
-				when /^-S$|^--mulfrsinseq$/
-					@o["MulFrSeq"]=true
+                # ---- Multiple curves in a single diagram from a single column
+                when /^-S$|^--mulfrsinseq$/
+                    @o["MulFrSeq"]=true
 
-				# ---- the range
-				when /^-r$|^--range$/
-					@o["Range"]=checkOptArg(xargv,i)+" "
-					i=i+1
+                # ---- the range
+                when /^-r$|^--range$/
+                    @o["Range"]=checkOptArg(xargv,i)+" "
+                    i=i+1
 
-				# ---- the size
-				when /^-s$|^--size$/
-					@o["Size"]=checkOptArg(xargv,i)
-					i=i+1
+                # ---- the size
+                when /^-s$|^--size$/
+                    @o["Size"]=checkOptArg(xargv,i)
+                    i=i+1
 
-				# ---- the aspect ratio
-				when /^-R$|^--aspectratio$/
-					@o["Ratio"]=checkOptArg(xargv,i)
-					i=i+1
+                # ---- the aspect ratio
+                when /^-R$|^--aspectratio$/
+                    @o["Ratio"]=checkOptArg(xargv,i)
+                    i=i+1
 
-				# ---- the line type
-				when /^-l$|^--linetype$/
-					@o["LineType"]=checkOptArg(xargv,i)
-					i=i+1
+                # ---- the line type
+                when /^-l$|^--linetype$/
+                    @o["LineType"]=checkOptArg(xargv,i)
+                    i=i+1
 
-				# ---- the line width
-				when /^-w$|^--linewidth$/
-					@o["LineWidth"]=checkOptArg(xargv,i)
-					i=i+1
+                # ---- the line width
+                when /^-w$|^--linewidth$/
+                    @o["LineWidth"]=checkOptArg(xargv,i)
+                    i=i+1
 
-				# ---- the title string
-				when /^-t$|^--title$/
-					@o["TitleString"]=checkOptArg(xargv,i)
-					i=i+1
+                # ---- the title string
+                when /^-t$|^--title$/
+                    @o["TitleString"]=checkOptArg(xargv,i)
+                    i=i+1
 
-				# ---- the style indices
-				when /^-I$|^--styleindices$/
-					@o["StyleIndices"]=checkOptArg(xargv,i)
-					i=i+1
+                # ---- the style indices
+                when /^-I$|^--styleindices$/
+                    @o["StyleIndices"]=checkOptArg(xargv,i)
+                    i=i+1
 
-				# ---- the x-axis label
-				when /^-x$|^--xlabel$/
-					com=com+"set xlabel \""+checkOptArg(xargv,i)+"\";\n"
-					i=i+1
+                # ---- the x-axis label
+                when /^-x$|^--xlabel$/
+                    com=com+"set xlabel \""+checkOptArg(xargv,i)+"\";\n"
+                    i=i+1
 
-				# ---- the y-axis label
-				when /^-y$|^--ylabel$/
-					com=com+"set ylabel \""+checkOptArg(xargv,i)+"\";\n"
-					i=i+1
+                # ---- the y-axis label
+                when /^-y$|^--ylabel$/
+                    com=com+"set ylabel \""+checkOptArg(xargv,i)+"\";\n"
+                    i=i+1
 
-				# ---- the vertical bars
-				when /^-B$|^--bars$/
-					@o["Bars"]=checkOptArg(xargv,i)
-					i=i+1
+                # ---- the vertical bars
+                when /^-B$|^--bars$/
+                    @o["Bars"]=checkOptArg(xargv,i)
+                    i=i+1
 
-				# ---- dump files
-				when /^-D$|^--dump$/
-					@o["DumpFiles"]=true
+                # ---- dump files
+                when /^-D$|^--dump$/
+                    @o["DumpFiles"]=true
 
-				# ---- an unknown option
-				when /^-/
-					$stderr.printf "%sunknown option '%s'\n",$err,opt
-					exit 1
+                # ---- an unknown option
+                when /^-/
+                    $stderr.printf "%sunknown option '%s'\n",$err,opt
+                    exit 1
 
-				# ---- The argument is not an option but a file
-				else
-					@o["Files"].push(opt)
-			end
-			i=i+1
-		end
+                # ---- The argument is not an option but a file
+                else
+                    @o["Files"].push(opt)
+            end
+            i=i+1
+        end
 
-		# ---- Configure the output filename. In the case of PDF
-		# ---- we keep the default filename, since GNUplot does not do
-		# ---- PDF, we translate afterwards
-		if @o["DoPDF"]
-			com=com+"set output \"foo.ps\";\n"
-		else
-			if @o["OutputFileSpecified"]!=""
-				com=com+"set output \""+@o["OutputFileSpecified"]+"\";\n"
-			else
-				if @o["OutputFileDefault"]!=""
-					com=com+"set output \""+@o["OutputFileDefault"]+"\";\n"
-				end
-			end
-		end
+        # ---- Configure the output filename. In the case of PDF
+        # ---- we keep the default filename, since GNUplot does not do
+        # ---- PDF, we translate afterwards
+        if @o["DoPDF"]
+            com=com+"set output \"foo.ps\";\n"
+        else
+            if @o["OutputFileSpecified"]!=""
+                com=com+"set output \""+@o["OutputFileSpecified"]+"\";\n"
+            else
+                if @o["OutputFileDefault"]!=""
+                    com=com+"set output \""+@o["OutputFileDefault"]+"\";\n"
+                end
+            end
+        end
 
-		# ---- The size and ratio options are set in the same command,
-		# ---- so do it here.
-		if @o["Size"]!="" or @o["Ratio"]!=""
-			com=com+"set size "
-			com=com+"ratio "+@o["Ratio"]+" " if @o["Ratio"]!=""
-			com=com+@o["Size"]+","+@o["Size"]+" " if @o["Size"]!=""
-			com=com+";\n"
-		end
-		@o["MiscOptions"]=com
-	end
+        # ---- The size and ratio options are set in the same command,
+        # ---- so do it here.
+        if @o["Size"]!="" or @o["Ratio"]!=""
+            com=com+"set size "
+            com=com+"ratio "+@o["Ratio"]+" " if @o["Ratio"]!=""
+            com=com+@o["Size"]+","+@o["Size"]+" " if @o["Size"]!=""
+            com=com+";\n"
+        end
+        @o["MiscOptions"]=com
+    end
 
-	# --------------------------------------------------------------------------
-	# ---- check for a valid option argument
-	def checkOptArg(argv,i)
-		if argv.length<i+2
-			$stderr.printf "%soption '%s' needs an argument!\n",$err,argv[i]
-			exit 1
-		end
-		if argv[i+1][0,1]=="-"
-			$stderr.printf "%sinvalid argument '%s' to option '%s'!\n",$err,
-				argv[i+1],argv[i]
-			exit 1
-		end
-		return argv[i+1]
-	end
+    # --------------------------------------------------------------------------
+    # ---- check for a valid option argument
+    def checkOptArg(argv,i)
+        if argv.length<i+2
+            $stderr.printf "%soption '%s' needs an argument!\n",$err,argv[i]
+            exit 1
+        end
+        if argv[i+1][0,1]=="-"
+            $stderr.printf "%sinvalid argument '%s' to option '%s'!\n",$err,
+                argv[i+1],argv[i]
+            exit 1
+        end
+        return argv[i+1]
+    end
 
-	# --------------------------------------------------------------------------
-	# ---- writes the usage message
-	def usage
-		$stderr.printf "usage: %s [ options ]\n",$0
-		$stderr.printf "\n%s\n",$help
-		exit 0
-	end
+    # --------------------------------------------------------------------------
+    # ---- writes the usage message
+    def usage
+        $stderr.printf "usage: %s [ options ]\n",$0
+        $stderr.printf "\n%s\n",$help
+        exit 0
+    end
 
-	# --------------------------------------------------------------------------
-	# ---- return a specific option
-	def [](oname)
-		x=@o[oname]
-		if x == nil
-			$stderr.printf "%sinternal error: option %s not found.\n",$err,oname
-			exit 1
-		else
-			return x
-		end
-	end
+    # --------------------------------------------------------------------------
+    # ---- return a specific option
+    def [](oname)
+        x=@o[oname]
+        if x == nil
+            $stderr.printf "%sinternal error: option %s not found.\n",$err,oname
+            exit 1
+        else
+            return x
+        end
+    end
 
-	# --------------------------------------------------------------------------
-	# ---- change a specific option
-	def []=(oname,newval)
-		x=@o[oname]
-		if x == nil
-			$stderr.printf "%sinternal error: option %s not found.\n",$err,oname
-			exit 1
-		else
-			@o[oname]=newval
-		end
-	end
+    # --------------------------------------------------------------------------
+    # ---- change a specific option
+    def []=(oname,newval)
+        x=@o[oname]
+        if x == nil
+            $stderr.printf "%sinternal error: option %s not found.\n",$err,oname
+            exit 1
+        else
+            @o[oname]=newval
+        end
+    end
 end
 
 # ******************************************************************************
@@ -340,34 +340,34 @@ end
 
 class Controller
 
-	# --------------------------------------------------------------------------
-	# ---- constructor
-	def initialize
-		@oc = OptionController.new(ARGV)
-		@StyleLtarr=%w{1 3 7 4 5 2 6 8}
-		@StylePtarr=%w{1 1 1 4 4 2 4 4}
-		if $GnuPlot4OrNewer
-			@StylePrefix="set style line "
-		else
-			@StylePrefix="set linestyle "
-		end
-	end
+    # --------------------------------------------------------------------------
+    # ---- constructor
+    def initialize
+        @oc = OptionController.new(ARGV)
+        @StyleLtarr=%w{1 3 7 4 5 2 6 8}
+        @StylePtarr=%w{1 1 1 4 4 2 4 4}
+        if $GnuPlot4OrNewer
+            @StylePrefix="set style line "
+        else
+            @StylePrefix="set linestyle "
+        end
+    end
 
-	# --------------------------------------------------------------------------
-	# ---- Get the string containing _ALL_ style definitions for gnuplot
-	def getStyleString
-		style=""
-		(1..@StyleLtarr.length).each do |i|
-			style=style+@StylePrefix+(i).to_s+" lt "+@StyleLtarr[i-1]+" lw "+@oc["LineWidth"]
-			style=style+" pt "+@StylePtarr[i-1]+" ps 0.5;\n"
-		end
-		style=style+"set style line 20 lt 7 lw 1 pt 4 ps 0.5;\n"
-		return style
-	end
+    # --------------------------------------------------------------------------
+    # ---- Get the string containing _ALL_ style definitions for gnuplot
+    def getStyleString
+        style=""
+        (1..@StyleLtarr.length).each do |i|
+            style=style+@StylePrefix+(i).to_s+" lt "+@StyleLtarr[i-1]+" lw "+@oc["LineWidth"]
+            style=style+" pt "+@StylePtarr[i-1]+" ps 0.5;\n"
+        end
+        style=style+"set style line 20 lt 7 lw 1 pt 4 ps 0.5;\n"
+        return style
+    end
 
-	# --------------------------------------------------------------------------
-	# ---- Starts a command and checks for success
-	def printAndRun(com)
+    # --------------------------------------------------------------------------
+    # ---- Starts a command and checks for success
+    def printAndRun(com)
 		$stderr.puts com
 		if not system(com)
 			$stderr.printf "Error while starting gnuplot."
