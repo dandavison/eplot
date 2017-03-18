@@ -172,6 +172,11 @@ class OptionController
 					com=com+"set terminal postscript color;\n"
 					@o["DoPDF"]=true
 
+                # Output to terminal
+                # http://stackoverflow.com/a/42009770/583763
+                when /^-T$|^--terminal$/
+                    com=com+"set terminal dumb;\n"
+
 				# ---- Specify a custom output file
 				when /^-o$|^--output$/
 					@o["OutputFileSpecified"]=checkOptArg(xargv,i)
