@@ -81,6 +81,9 @@ Output file format options:
  -a --pdf        Output to the pdf file foo.pdf
  -e --emf        Output to the emf file foo.emf
  -o <fname>      Specify the output filename
+ -T --terminal   Output to the terminal
+ -i --imgcat     iTerm2: display PNG file using `imgcat`
+                 https://www.iterm2.com/documentation-images.html
 
 Output formatting options:
  -r <ranges>     set the range of x and y axis values
@@ -101,6 +104,7 @@ Miscellaneous opions:
  -D --dump       dump all used files as "eplot-dump-<nr>.dat"
  -h --help       print this help message
  -v --version    print version information
+ -q --quiet      don't echo gnuplot commands to screen
 MARKER_MESSAGE
 
 $licence=<<MARKER_MESSAGE
