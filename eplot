@@ -81,7 +81,7 @@ Output file format options:
  -a --pdf        Output to the pdf file foo.pdf
  -e --emf        Output to the emf file foo.emf
  -o <fname>      Specify the output filename
- -T --terminal   Output to the terminal
+ -T --terminal   Output as ascii drawing to the terminal
  -i --imgcat     iTerm2: display PNG file using `imgcat`
                  https://www.iterm2.com/documentation-images.html
 
